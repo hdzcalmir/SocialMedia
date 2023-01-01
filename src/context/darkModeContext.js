@@ -14,6 +14,12 @@ export const DarkModeContext = createContext();
 // vrijednost toj vrijednosti, te ako je tema bila svjetla klikom na to ce biti dark mode true i tema ce postati tamna
 export const DarkModeContextProvider = ({ children }) => {
     // odradili smo JSON.parse kako bi nam vratilo boolean
+
+    // a u useState smo stavili localStorage.getItem('darkMode') sto znaci da ce prilikom ulaska na stranicu provjeriti da li postoji varijabla
+    // darkMode, ukoliko postoji uzet ce tu trenutnu vrijednost te varijable i na odnosu toga postavit temu tamnu/svjetlu a ukoliko ne postoji varijabla
+    // u localStorage darkMode, to znaci da korisnik prethodno nije bio na stranici te ce mu po defaultu kreirati varijablu i dodijeliti joj 
+    // vrijednost false, sto znaci da je po defaultu svjetla tema a korisnik klikom na specifican button moze promijeniti tu temu u tamnu, sto je
+    // prethodno pojasnjeno
     const [darkMode, setDarkMode] = useState(JSON.parse(localStorage.getItem('darkMode')) || false);
 
     const toggle = () => {
