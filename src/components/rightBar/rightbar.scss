@@ -1,4 +1,7 @@
+@import '../../style.scss';
+
 .rightBar {
+    @include themify($themes) {
     flex: 3;
     position: sticky;
     top: 70px;
@@ -7,6 +10,9 @@
     // ukoliko dodamo jos elemenata morat cemo dodat i overflow scroll kako bismo mogli skrollat i taj menu sa strane
 
     overflow: scroll;
+
+    background-color: themed('bgSoft');
+    color: themed('textColor');
 
     // sakriva nam prikaz scrollbara
     &::-webkit-scrollbar{
@@ -23,6 +29,7 @@
                 padding: 10px 15px;
                 border-radius: 10px;
                 margin-bottom: 20px;
+                background-color: themed('bg');
 
                box-shadow:
                 0.1px 0px 1.9px rgba(0, 0, 0, 0.13),
@@ -64,11 +71,11 @@
                         }
                         
                         p {
-                            color: gray;
+                            color: themed('textColorSoft');
                         }
 
                         span{
-                            color: #444;
+                            color: themed('textColor');
                             font-weight: 500;
                         }
 
@@ -102,5 +109,5 @@
 
         }
 
-
+    }
 }

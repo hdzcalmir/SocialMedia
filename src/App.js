@@ -6,27 +6,34 @@ import LeftBar from "./components/leftBar/LeftBar";
 import RightBar from "./components/rightBar/RightBar";
 import Home from "./pages/home/Home";
 import Profile from './pages/profile/Profile';
+import './style.scss';
+import { useContext } from "react";
+import { DarkModeContext } from "./context/darkModeContext";
 
 function App() {
 
   // lazna funkcionalnost s kojom protektujemo layout routes
   const currentUser = true;
 
+  const { darkMode } = useContext(DarkModeContext);
+  console.log(darkMode);
+
   // layout koji mozemo koristiti bilo gdje
+
   const Layout = () => {
     return (
-      <div>
+      <div className={`theme-${darkMode ? "dark" : "light"}`}>
         <Navbar />
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: "flex" }}>
           <LeftBar />
-          <div style={{ flex: '6' }}>
+          <div style={{ flex: 6 }}>
             <Outlet />
           </div>
           <RightBar />
         </div>
-      </div >
-    )
-  }
+      </div>
+    );
+  };
 
   // provjera, odnos ovim smo wrapovali layout linkove
   // te ukoliko korisnik zeli da se prebaci na stranicu
