@@ -8,8 +8,16 @@ import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { DarkModeContext } from '../../context/darkModeContext';
+import { AuthContext } from '../../context/authContext';
+
 
 function Navbar() {
+
+  const { toggle, darkMode } = useContext(DarkModeContext);
+  const { currentUser } = useContext(AuthContext);
+
   return (
     <div className="navbar">
       <div className="left">
@@ -17,7 +25,7 @@ function Navbar() {
         <span>polosocial.</span>
         </Link>
         <HomeRoundedIcon/>
-        <NightlightRoundedIcon/>
+        {darkMode === true ? <WbSunnyRoundedIcon onClick={toggle}/> : <NightlightRoundedIcon onClick={toggle}/>}
         <GridViewRoundedIcon/>
         <div className="search">
           <SearchRoundedIcon/>
@@ -29,8 +37,8 @@ function Navbar() {
         <EmailRoundedIcon/>
         <NotificationsRoundedIcon/>
         <div className="user">
-          <img src="https://images.pexels.com/photos/1848565/pexels-photo-1848565.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
-          <span>John Doe</span>
+          <img src={currentUser.profilePic} alt="" />
+          <span>{currentUser.name}</span>
         </div>
       </div>
     </div>

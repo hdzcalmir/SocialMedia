@@ -9,14 +9,20 @@ import Profile from './pages/profile/Profile';
 import './style.scss';
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
+import { AuthContext } from "./context/authContext";
 
 function App() {
 
   // lazna funkcionalnost s kojom protektujemo layout routes
-  const currentUser = true;
+  // const currentUser = true;
+
+  // sada ovu funkcionalnost iznad mozemo odraditi preko useContexta, odnosno authContexta
+
+  const { currentUser } = useContext(AuthContext);
+  // console.log(currentUser);
 
   const { darkMode } = useContext(DarkModeContext);
-  console.log(darkMode);
+  // console.log(darkMode);
 
   // layout koji mozemo koristiti bilo gdje
 
@@ -43,6 +49,8 @@ function App() {
     if (!currentUser) {
       return <Navigate to='/login' />
     }
+    console.log(children);
+    //
     return children
   }
 
