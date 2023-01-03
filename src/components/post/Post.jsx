@@ -6,8 +6,12 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import Comments from '../comments/Comments';
 
 export const Post = ({post}) => {
+
+
+  const [commentOpen, setCommentOpen] = useState(false);
 
   // temporary
   const [liked, setLiked] = useState(false);
@@ -22,6 +26,7 @@ export const Post = ({post}) => {
       setLikes(likes + 1)
     }
    }
+
 
   return (
   <div className='post'>
@@ -49,7 +54,7 @@ export const Post = ({post}) => {
         <span>{likes}</span>
         </div>
         <div className="btn">
-        <TextsmsOutlinedIcon/>
+        <TextsmsOutlinedIcon onClick={() => setCommentOpen(!commentOpen)}/>
         <span>20</span>
         </div>
         <div className="btn">
@@ -57,8 +62,9 @@ export const Post = ({post}) => {
           <span>33</span>
         </div>
       </div>
+      {commentOpen && <Comments/>}
     </div>
-    </div>
+  </div>
   )
 }
 
