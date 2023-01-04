@@ -11,6 +11,14 @@
 
     overflow: scroll;
 
+    @include mobile {
+        display: none;
+    }
+
+    @include tablet {
+        display: none;
+    }
+
     background-color: themed('bgSoft');
     color: themed('textColor');
 

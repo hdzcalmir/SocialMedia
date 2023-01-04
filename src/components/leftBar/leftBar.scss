@@ -13,12 +13,19 @@
     // &::-webkit-scrollbar{
     //     display: none;
     // }
+
+    @include mobile {
+        display: none;
+    }
+
+
     background-color: themed('bg');
     color: themed('textColor');
     
     .container {
 
         padding: 20px;
+
 
         hr {
             margin: 20px 0px;
