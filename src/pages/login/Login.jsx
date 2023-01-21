@@ -1,14 +1,40 @@
 import './login.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
 import { useContext } from 'react';
+import { useState } from 'react';
 
 function Login() {
 
+    // imporatli smo login funkciju iz auth contexta gdje smo u biti kreirali jedan layer zastite pri loginu
     const {login} = useContext(AuthContext);
 
-    const handleLogin = () => { 
-        login();
+    const [inputs, setInputs] = useState({
+        username: '',
+        password: ''
+    })
+
+    const [err, setErr] = useState(null);
+
+    const navigate = useNavigate();
+
+    const handleChange = (e) => { 
+        e.preventDefault();
+        setInputs(state=>({...state, [e.target.name]: e.target.value}));
+     }
+
+    const handleLogin = async (e) => { 
+
+        e.preventDefault();
+
+        try {
+          await login(inputs);
+          // nakon uspjesnog logina redirecta nas na homepage
+          navigate('/');
+
+        }catch(err) {
+            setErr(err);
+        }
      }
 
   return (
@@ -25,8 +51,9 @@ function Login() {
             <div className="right">
                 <h1>Login</h1>
                 <form action="">
-                    <input type="text" placeholder='Username' />
-                    <input type="password" placeholder='Password' />
+                    <input type="text" placeholder='Username' name='username' onChange={handleChange}/>
+                    <input type="password" placeholder='Password' name='password' onChange={handleChange}/>
+                    {err && err.response.data}
                     <button onClick={handleLogin}>Login</button>
                 </form>
             </div>

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { createContext } from "react";
+import axios from "axios";
 
 
 
@@ -20,24 +21,36 @@ export const AuthContextProvider = ({ children }) => {
     // u localStorage darkMode, to znaci da korisnik prethodno nije bio na stranici te ce mu po defaultu kreirati varijablu i dodijeliti joj 
     // vrijednost false, sto znaci da je po defaultu svjetla tema a korisnik klikom na specifican button moze promijeniti tu temu u tamnu, sto je
     // prethodno pojasnjeno
-    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')) || false);
+    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
 
     // ova funkcija seta state na odnosu unesenih podataka za prijavu i koristi te podatke za login
-    const login = () => {
+    const login = async (inputs) => {
         // TODO
-        setCurrentUser({
-            id: 1,
-            name: "Nermina Halilcevic",
-            profilePic: "https://images.pexels.com/photos/1848565/pexels-photo-1848565.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        // setCurrentUser({
+        //     id: 1,
+        //     name: "Nermina Halilcevic",
+        //     profilePic: "https://images.pexels.com/photos/1848565/pexels-photo-1848565.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        // });
+
+        const res = await axios.post("http://localhost:8080/server/auth/login", inputs, {
+            // ovo je bitno kada radimo sa cookies, withCredentials
+            withCredentials: true
         });
-    }
+
+        // setCurrentUser(res.data);
+        // backend server nam salje podatke
+        setCurrentUser(res.data);
+        // console.log(res.data);
+
+    };
 
     // JSON.parse vraca izvorni oblik
 
     // JSON.stringify pretvara u string, a ovo radimo jer ne mozemo u localstorage spremiti objekat, to mora biti string a zatim to ponovo
     // samo pretvorimo u objekat
+    // console.log(currentUser);
     useEffect(() => {
-        localStorage.setItem('user', JSON.stringify(currentUser))
+        localStorage.setItem("user", JSON.stringify(currentUser))
     }, [currentUser]);
 
 

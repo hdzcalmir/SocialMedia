@@ -10,6 +10,7 @@ import './style.scss';
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function App() {
 
@@ -26,18 +27,29 @@ function App() {
 
   // layout koji mozemo koristiti bilo gdje
 
+  // pomocu queryclientprovidera mozemo uzeti putem reacta bilo koji podatak iz db
+  const queryClient = new QueryClient();
+
+  // queryClientProvider mora wrapovati cijelu aplikaciju, a to smo uradili jer ce sve manje komponente se nalazit onda u tom
+  // wrapu i svaki put kada se desi neki request moci cemo dohvatiti odmah te podatke na nasem timeline-u ovaj put jer smo sve te komponente
+  // warpovali ranije navedenim queryClientProviderom
+
+  // a necemo wrapovati index js jer nam to treba samo za layout a layout se nalazi u app.js
+
   const Layout = () => {
     return (
-      <div className={`theme-${darkMode ? "dark" : "light"}`}>
-        <Navbar />
-        <div style={{ display: "flex" }}>
-          <LeftBar />
-          <div style={{ flex: 6 }}>
-            <Outlet />
+      <QueryClientProvider client={queryClient}>
+        <div className={`theme-${darkMode ? "dark" : "light"}`}>
+          <Navbar />
+          <div style={{ display: "flex" }}>
+            <LeftBar />
+            <div style={{ flex: 6 }}>
+              <Outlet />
+            </div>
+            <RightBar />
           </div>
-          <RightBar />
         </div>
-      </div>
+      </QueryClientProvider>
     );
   };
 

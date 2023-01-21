@@ -9,13 +9,19 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts"
+import { useContext } from 'react';
+import { AuthContext } from '../../context/authContext';
 
 export default function Profile() {
+
+  const {currentUser} = useContext(AuthContext);
+
+
   return (
     <div className="profile">
       <div className="images">
-        <img src="https://images.pexels.com/photos/949587/pexels-photo-949587.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt='' className='cover' />
-        <img src="https://images.pexels.com/photos/14686959/pexels-photo-14686959.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt='' className='profilePic' />
+        <img src={currentUser.coverPhoto} alt='' className='cover' />
+        <img src={currentUser.profilePhoto} alt='' className='profilePic' />
       </div> 
       <div className="profileContainer">
         <div className="uInfo">

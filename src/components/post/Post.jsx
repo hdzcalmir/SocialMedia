@@ -7,6 +7,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Comments from '../comments/Comments';
+import moment from 'moment';
 
 export const Post = ({post}) => {
 
@@ -33,20 +34,21 @@ export const Post = ({post}) => {
     <div className="container">
       <div className="user">
         <div className="userInfo">
-          <img src={post.profilePic} alt="" />
+          <img src={post.profilePhoto} alt="" />
           <div className="details">
             {/* color: inherit znaci da nece biti specificne boje reko, bice default */}
             <Link to={`/profile/${post.userId}`} style={{textDecoration:'none', color:'inherit'}}>
               <span className='name'>{post.name}</span>
               </Link>
-              <span className='date'>1 minute ago</span>
+              {/* moment nam ispisuje prije koliko je kreiran post */}
+              <span className='date'>{moment(post.createdDate).fromNow()}</span>
           </div>
         </div>
         <MoreHorizIcon/>
       </div>
       <div className="content">
-        <p>{post.desc}</p>
-        <img src={post.img} alt="" />
+        <p>{post.description}</p>
+        <img src={'upload/' + post.img} alt="" />
       </div>
       <div className="btns">
         <div className="btn">
@@ -62,7 +64,8 @@ export const Post = ({post}) => {
           <span>33</span>
         </div>
       </div>
-      {commentOpen && <Comments/>}
+      {/* saljemo u posts jsx post id */}
+      {commentOpen && <Comments postId={post.id}/>}
     </div>
   </div>
   )

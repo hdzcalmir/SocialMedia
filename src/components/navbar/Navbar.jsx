@@ -37,7 +37,7 @@ function Navbar() {
         <EmailRoundedIcon/>
         <NotificationsRoundedIcon/>
         <div className="user">
-          <img src={currentUser.profilePic} alt="" />
+          <img src={currentUser.profilePhoto} alt="" />
           <span>{currentUser.name}</span>
         </div>
       </div>
