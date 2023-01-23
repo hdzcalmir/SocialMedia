@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import Comments from '../comments/Comments';
 import moment from 'moment';
-import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { makeRequest } from '../../axios';
 import { AuthContext } from '../../context/authContext';
 

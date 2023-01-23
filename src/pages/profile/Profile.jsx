@@ -11,17 +11,36 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts"
 import { useContext } from 'react';
 import { AuthContext } from '../../context/authContext';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { makeRequest } from '../../axios';
+import { useLocation } from 'react-router-dom';
 
 export default function Profile() {
+
 
   const {currentUser} = useContext(AuthContext);
 
 
+  // na ovaj nacin smo uzeli treci element iz linka, odnosno userID
+  const userId = useLocation().pathname.split("/")[2];
+
+
+  // getamo podatke o useru
+  const {isLoading, error, data} = useQuery(["user"], () =>
+  makeRequest.get("/users/find/" + userId).then((res)=> {
+    return res.data;
+  })
+  );
+
+  // isLoading mozemo koristiti i za cijeli return
+
+  console.log(data);
+
   return (
     <div className="profile">
       <div className="images">
-        <img src={currentUser.coverPhoto} alt='' className='cover' />
-        <img src={currentUser.profilePhoto} alt='' className='profilePic' />
+        <img src={isLoading ? "očitava se" : data.coverPhoto} alt='' className='cover' />
+        <img src={isLoading ? "očitava se" : data.profilePhoto} alt='' className='profilePic' />
       </div> 
       <div className="profileContainer">
         <div className="uInfo">
@@ -44,7 +63,7 @@ export default function Profile() {
             </a>
           </div>
           <div className="center">
-            <span>Nermina Halilcevic</span>
+            <span>{isLoading ? "očitava se" : data.name}</span>
             <div className="info">
               <div className="item">
                 <PlaceIcon/>
@@ -52,10 +71,10 @@ export default function Profile() {
               </div>
               <div className="item">
                 <LanguageIcon/>
-                <span>almirhodzic.dev</span>
+                <span>{isLoading ? "očitava se" : data.website}</span>
               </div>
             </div>
-            <button>Follow</button>
+            {isLoading ? "očitava se" : currentUser.name === data.name ? <button>Edit</button> : <button>Follow</button>}
           </div>
           <div className="right">
             <EmailOutlinedIcon/>
