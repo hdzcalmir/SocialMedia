@@ -32,9 +32,40 @@ export default function Profile() {
   })
   );
 
+  // getamo followere usera
+  const {isLoading: loadingFollowers, data: relationshipData} = useQuery(["relationship"], () =>
+  makeRequest.get("/relationships?followedUserId=" + userId).then((res)=> {
+    return res.data;
+  })
+  );
+
+  // console.log(relationshipData);
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation((following) => {
+    // ukoliko smo lajkovali izvrsit ce se post metoda iz likes controllera
+    if(following) return makeRequest.delete('/relationships?userId=' + userId);
+    // a ukoliko smo izbrisali like izvrsit ce se delete metoda iz likes
+    return makeRequest.post("/relationships", {userId: userId});
+    // uzimamo post.id kojeg dobivamo u funkciju Post kao argument
+  },
+  {
+    onSuccess: () => { 
+      // invalidate and refatch
+      queryClient.invalidateQueries(["relationship"])
+     },
+  }
+  );
+
+
+  const handleFollow = () => {
+    mutation.mutate(relationshipData.includes(currentUser.id)); // ovo saljemo kao argument mutate funkciji, koja to prima u vidu parametra
+  }
+
   // isLoading mozemo koristiti i za cijeli return
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="profile">
@@ -74,14 +105,18 @@ export default function Profile() {
                 <span>{isLoading ? "očitava se" : data.website}</span>
               </div>
             </div>
-            {isLoading ? "očitava se" : currentUser.name === data.name ? <button>Edit</button> : <button>Follow</button>}
+            {isLoading ? "očitava se" : currentUser.name === data.name ? 
+            ( <button>Edit</button> ) : 
+            // ukoliko user prati korisnicki profil sa specificnim ID-em ispisat ce mu followed, a ukoliko ne ispisat ce mu follow
+            ( <button onClick={handleFollow}>{loadingFollowers ? "očitava se" : relationshipData.includes(currentUser.id) ? "Followed" : "Follow"}</button> )}
           </div>
           <div className="right">
             <EmailOutlinedIcon/>
             <MoreVertIcon/>
           </div>
         </div>
-        <Posts/>
+        {/* prosljeđujemo u posts userId, odnosno kako bismo u slucaju da je korisnik na specificnom profilu mogli vratiti samo njegove postove */}
+        <Posts userId = {userId}/>
 
       </div>
     </div>

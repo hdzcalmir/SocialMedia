@@ -61,7 +61,7 @@ function App() {
     if (!currentUser) {
       return <Navigate to='/login' />
     }
-    console.log(children);
+    // console.log(children);
     //
     return children
   }
