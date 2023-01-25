@@ -72,7 +72,7 @@ export const Post = ({post}) => {
     <div className="container">
       <div className="user">
         <div className="userInfo">
-          <img src={post.profilePhoto} alt="" />
+          <img src={"/uplaod/" + post.profilePhoto} alt="" />
           <div className="details">
             {/* color: inherit znaci da nece biti specificne boje reko, bice default */}
             <Link to={`/profile/${post.userId}`} style={{textDecoration:'none', color:'inherit'}}>

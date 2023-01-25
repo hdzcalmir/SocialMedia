@@ -9,14 +9,17 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts"
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/authContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { makeRequest } from '../../axios';
 import { useLocation } from 'react-router-dom';
+import Update from '../../components/update/Update';
 
 export default function Profile() {
 
+
+  const [openUpdate, setOpenUpdate] = useState(false);
 
   const {currentUser} = useContext(AuthContext);
 
@@ -69,9 +72,13 @@ export default function Profile() {
 
   return (
     <div className="profile">
+      {isLoading ? (
+        "loading"
+      ) : (
+        <>
       <div className="images">
-        <img src={isLoading ? "očitava se" : data.coverPhoto} alt='' className='cover' />
-        <img src={isLoading ? "očitava se" : data.profilePhoto} alt='' className='profilePic' />
+        <img src={isLoading ? "očitava se" : "/upload/" + data.coverPhoto} alt='' className='cover' />
+        <img src={isLoading ? "očitava se" : "/upload/" + data.profilePhoto} alt='' className='profilePic' />
       </div> 
       <div className="profileContainer">
         <div className="uInfo">
@@ -105,10 +112,14 @@ export default function Profile() {
                 <span>{isLoading ? "očitava se" : data.website}</span>
               </div>
             </div>
-            {isLoading ? "očitava se" : currentUser.name === data.name ? 
-            ( <button>Edit</button> ) : 
+            {isLoading ? "očitava se" : currentUser.id === data.id ? 
+            ( <button onClick={() => setOpenUpdate(true)}>Edit</button> ) : 
             // ukoliko user prati korisnicki profil sa specificnim ID-em ispisat ce mu followed, a ukoliko ne ispisat ce mu follow
-            ( <button onClick={handleFollow}>{loadingFollowers ? "očitava se" : relationshipData.includes(currentUser.id) ? "Followed" : "Follow"}</button> )}
+            ( <button onClick={handleFollow}>{
+              relationshipData.includes(currentUser.id) ? 
+              "Followed" : 
+              "Follow"}</button> 
+            )}
           </div>
           <div className="right">
             <EmailOutlinedIcon/>
@@ -117,8 +128,10 @@ export default function Profile() {
         </div>
         {/* prosljeđujemo u posts userId, odnosno kako bismo u slucaju da je korisnik na specificnom profilu mogli vratiti samo njegove postove */}
         <Posts userId = {userId}/>
-
       </div>
+        </>
+        )}
+      {openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data}/>}
     </div>
   )
 }
